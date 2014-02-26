@@ -77,3 +77,4 @@ class HL7::Message::Segment::NK1 < HL7::Message::Segment
   add_field :race
   add_field :handicap
   add_field :contact_persons_ssn
+end

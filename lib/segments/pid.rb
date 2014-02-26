@@ -2,7 +2,7 @@
 require 'ruby-hl7'
 class HL7::Message::Segment::PID < HL7::Message::Segment
   weight 1
-  has_children [:NK1,:NTE,:PV1,:PV2]
+  has_children [:NK1, :NTE, :PV1, :PV2]
   add_field :set_id
   add_field :patient_id
   add_field :patient_id_list
@@ -14,7 +14,7 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   end
   add_field :admin_sex do |sex|
     unless /^[FMOUANC]$/.match(sex) || sex == nil || sex == ""
-      raise HL7::InvalidDataError.new( "bad administrative sex value (not F|M|O|U|A|N|C)" )
+      raise HL7::InvalidDataError.new("bad administrative sex value (not F|M|O|U|A|N|C)")
     end
     sex = "" unless sex
     sex
@@ -30,7 +30,7 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :religion
   add_field :account_number
   add_field :social_security_num
-  add_field :driver_license_num
+  add_field :drivers_license_number
   add_field :mothers_id
   add_field :ethnic_group
   add_field :birthplace
@@ -39,11 +39,15 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   add_field :citizenship
   add_field :vet_status
   add_field :nationality
-  add_field :death_date
+  add_field :death_date do |value|
+    convert_to_ts(value)
+  end
   add_field :death_indicator
   add_field :id_unknown_indicator
   add_field :id_readability_code
-  add_field :last_update_date
+  add_field :last_update_date do |value|
+    convert_to_ts(value)
+  end
   add_field :last_update_facility
   add_field :species_code
   add_field :breed_code

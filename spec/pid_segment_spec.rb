@@ -24,7 +24,12 @@ describe HL7::Message::Segment::PID do
       end.should raise_error(HL7::InvalidDataError)
     end
 
-    it "sets values correctly" do
+    it 'sets the name correctly' do
+      pid = HL7::Message::Segment::PID.new @base
+      pid.patient_name.should == 'LastName^FirstName^MiddleInitial^SR^NickName'
+    end
+
+    it 'supports death fields' do
       pid = HL7::Message::Segment::PID.new @base
       pid.set_id.should == "1"
       pid.patient_id.should == ""
@@ -45,7 +50,7 @@ describe HL7::Message::Segment::PID do
       pid.religion.should == ""
       pid.account_number.should == "555.55"
       pid.social_security_num.should == "012345678"
-      pid.driver_license_num.should == ""
+      pid.drivers_license_number.should == ""
       pid.mothers_id.should == ""
       pid.ethnic_group.should == ""
       pid.birthplace.should == ""

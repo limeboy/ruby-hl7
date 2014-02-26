@@ -1,16 +1,15 @@
 # encoding: UTF-8
-require 'ruby-hl7'
 class HL7::Message::Segment::PV1 < HL7::Message::Segment
   weight 2
   add_field :set_id
   add_field :patient_class
-  add_field :assigned_location
+  add_field :assigned_patient_location, {:format => HL7::Message::DataTypes.PL}
   add_field :admission_type
   add_field :preadmit_number
   add_field :prior_location
-  add_field :attending_doctor
-  add_field :referring_doctor
-  add_field :consulting_doctor
+  add_field :attending_doctor, {:format => HL7::Message::DataTypes.XCN}
+  add_field :referring_doctor, {:format => HL7::Message::DataTypes.XCN}
+  add_field :consulting_doctor, {:format => HL7::Message::DataTypes.XCN}
   add_field :hospital_service
   add_field :temporary_location
   add_field :preadmit_indicator

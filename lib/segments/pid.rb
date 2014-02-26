@@ -1,13 +1,13 @@
 # encoding: UTF-8
-require 'ruby-hl7'
+
 class HL7::Message::Segment::PID < HL7::Message::Segment
   weight 1
   has_children [:NK1, :NTE, :PV1, :PV2]
   add_field :set_id
-  add_field :patient_id
-  add_field :patient_id_list
+  add_field :patient_id, {:format => HL7::Message::DataTypes.CX}
+  add_field :patient_id_list, {:format => HL7::Message::DataTypes.CX}
   add_field :alt_patient_id
-  add_field :patient_name
+  add_field :patient_name, {:format => HL7::Message::DataTypes.XPN}
   add_field :mother_maiden_name
   add_field :patient_dob do |value|
     convert_to_ts(value)
@@ -21,14 +21,14 @@ class HL7::Message::Segment::PID < HL7::Message::Segment
   end
   add_field :patient_alias
   add_field :race
-  add_field :address
+  add_field :address, {:format => HL7::Message::DataTypes.XAD}
   add_field :country_code
   add_field :phone_home
   add_field :phone_business
   add_field :primary_language
   add_field :marital_status
   add_field :religion
-  add_field :account_number
+  add_field :account_number, {:format => HL7::Message::DataTypes.CX}
   add_field :social_security_num
   add_field :drivers_license_number
   add_field :mothers_id

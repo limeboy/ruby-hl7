@@ -93,6 +93,7 @@ module HL7::Message::SegmentFields
             component[field_format[i]] = str[i]
             i                          += 1
           end
+          component['origin'] = ret
         rescue
           puts "Error: '#{str.inspect}'; field_format '#{field_format.inspect}'"
         end

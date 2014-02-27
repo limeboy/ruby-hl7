@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email = %q{ruby-hl7@googlegroups.com}
   s.extra_rdoc_files = [
     "LICENSE",
-    "README.rdoc"
+    "README.md"
   ]
  
   s.files         = `git ls-files`.split "\n"

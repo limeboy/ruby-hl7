@@ -1,15 +1,15 @@
 ## Overview
 
-Version 1.0.3 of the ruby-hl7 gem removes some sample messages.
+Version 1.0.3.2 of the ruby-hl7 gem.
 
 ## Release Date
 
-January 25, 2011
+February 27, 2014
 
 ## In this release
 
-* Sample messages from Cerner were removed.
-* Some gem dependencies were updated.
+Support formatting for elements with 'origin' value
+Extended list of segments
 
 ### Bug fixes
 

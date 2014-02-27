@@ -15,7 +15,7 @@ describe HL7::Message::Segment::PV1 do
     it 'allows creation of an OBX segment' do
       pv1= HL7::Message::Segment::PV1.new
       pv1.referring_doctor="Smith^John"
-      pv1.referring_doctor.should == "Smith^John"
+      pv1.referring_doctor['origin'].should == "Smith^John"
       pv1.admit_date = Date.new(2014, 1, 1)
       pv1.admit_date.should == '20140101'
     end

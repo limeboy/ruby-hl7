@@ -18,8 +18,17 @@ describe HL7::Message::Segment::NK1 do
     it 'allows access to an NK1 segment' do
       lambda do
         nk1 = HL7::Message::Segment::NK1.new( @base_nk1 )
-        nk1.name.should == 'Mum^Martha^M^^^^L'
-        nk1.phone_number.should == '^PRN^PH^^1^555^5552006'
+
+        nk1.name.should be_a_kind_of(Hash)
+        nk1.name.size.should == 8
+        nk1.name['family_name'].should == 'Mum'
+        nk1.name['given_name'].should == 'Martha'
+        nk1.name['origin'].should == 'Mum^Martha^M^^^^L'
+
+        nk1.phone_number['use_code'].should == 'PRN'
+        nk1.phone_number['area_or_city_code'].should == '555'
+        nk1.phone_number['local_number'].should == '5552006'
+        nk1.phone_number['origin'].should == '^PRN^PH^^1^555^5552006'
       end.should_not raise_error
     end
   end

@@ -26,7 +26,7 @@ describe HL7::Message::Segment::PID do
 
     it 'sets the name correctly' do
       pid = HL7::Message::Segment::PID.new @base
-      pid.patient_name.should == 'LastName^FirstName^MiddleInitial^SR^NickName'
+      pid.patient_name['origin'].should == 'LastName^FirstName^MiddleInitial^SR^NickName'
     end
 
     it 'supports death fields' do
@@ -35,7 +35,7 @@ describe HL7::Message::Segment::PID do
       pid.patient_id.should == ""
       pid.patient_id_list.should == "333"
       pid.alt_patient_id.should == ""
-      pid.patient_name.should == "LastName^FirstName^MiddleInitial^SR^NickName"
+      pid.patient_name['origin'].should == "LastName^FirstName^MiddleInitial^SR^NickName"
       pid.mother_maiden_name.should == ""
       pid.patient_dob.should == "19760228"
       pid.admin_sex.should == "F"

@@ -60,29 +60,65 @@ module HL7::Message::SegmentFields
 
   def field_info( name ) #:nodoc:
     field_blk = nil
+    field_format = nil
     idx = name # assume we've gotten a fixnum
     unless name.kind_of?( Fixnum )
       fld_info = self.class.fields[ name ]
       idx = fld_info[:idx].to_i
       field_blk = fld_info[:blk]
+      field_format = fld_info[:format]
     end
 
-    [ idx, field_blk ]
+    [ idx, field_blk, field_format ]
   end
 
   def read_field( name ) #:nodoc:
-    idx, field_blk = field_info( name )
+    idx, field_blk, field_format = field_info( name )
     return nil unless idx
     return nil if (idx >= @elements.length)
 
     ret = @elements[ idx ]
     ret = ret.first if (ret.kind_of?(Array) && ret.length == 1)
     ret = field_blk.call( ret ) if field_blk
-    ret
+
+    if ret =~ /#{@repeat_delim}/ && !name.eql?(:enc_chars) && !field_format.nil?
+      field = []
+      ret.split(/#{@repeat_delim}/).each do |r|
+        component = Hash.new
+        str = r.split(@item_delim)
+
+        begin
+          i = 0
+          str.each do
+            component[field_format[i]] = str[i]
+            i                          += 1
+          end
+        rescue
+          puts "Error: '#{str.inspect}'; field_format '#{field_format.inspect}'"
+        end
+        field << component
+      end
+    else
+      field = ret
+      if ret.include?(@item_delim) && !field_format.nil?
+        component = Hash.new
+
+        str = ret.split(@item_delim)
+        i = 0
+        str.each do
+          component[field_format[i]] = str[i]
+          i += 1
+        end
+        component['origin'] = ret
+        field = component
+      end
+    end
+
+    field
   end
 
   def write_field( name, value ) #:nodoc:
-    idx, field_blk = field_info( name )
+    idx, field_blk, field_format = field_info( name )
     return nil unless idx
 
     if (idx >= @elements.length)
@@ -92,8 +128,26 @@ module HL7::Message::SegmentFields
       @elements += missing
     end
 
-    value = value.first if (value && value.kind_of?(Array) && value.length == 1)
-    value = field_blk.call( value ) if field_blk
+    if value.kind_of?(Hash) and !field_format.nil?
+      builder = {}
+      elem = @elements[idx].split(@item_delim)
+      elem.each_with_index do |val, i|
+        builder[field_format[i]] = elem[i]
+      end
+      value.each_pair do |k, v|
+        builder[k] = v
+      end
+      value = []
+      builder.each_value do |v|
+        value << v
+      end
+      value = value.join("^")
+    else
+      value = value.first if (value && value.kind_of?(Array) && value.length == 1)
+      value = field_blk.call( value ) if field_blk
+    end
+
     @elements[ idx ] = value.to_s
+
   end
 end

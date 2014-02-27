@@ -25,6 +25,7 @@ class HL7::Message::Segment
   attr :element_delim
   attr :item_delim
   attr :segment_weight
+  attr :repeat_delim
 
   METHOD_MISSING_FOR_INITIALIZER = <<-END
     def method_missing( sym, *args, &blk )
@@ -162,8 +163,9 @@ class HL7::Message::Segment
   def setup_delimiters(delims)
     delims = [ delims ].flatten
 
-    @element_delim = ( delims.length>0 ) ? delims[0] : "|"
-    @item_delim = ( delims.length>1 ) ? delims[1] : "^"
+    @element_delim = (delims.kind_of?(Array) && delims.length>0) ? delims[0] : "|"
+    @item_delim    = (delims.kind_of?(Array) && delims.length>1) ? delims[1] : "^"
+    @repeat_delim  = (delims.kind_of?(Array) && delims.length>2) ? delims[2] : "~"
   end
 
   # DSL element to define a segment's sort weight

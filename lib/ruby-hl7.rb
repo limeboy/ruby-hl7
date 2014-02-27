@@ -50,6 +50,7 @@ end
 
 require 'message_parser'
 require 'message'
+require 'data_types'
 require 'segment_list_storage'
 require 'segment_generator'
 require 'segment_fields'
